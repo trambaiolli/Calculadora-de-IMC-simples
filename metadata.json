@@ -1,0 +1,5 @@
+{
+  "name": "Calculadora de IMC",
+  "description": "Uma calculadora de Índice de Massa Corporal simples e eficiente, desenvolvida com HTML, CSS e JavaScript Vanilla.",
+  "requestFramePermissions": []
+}

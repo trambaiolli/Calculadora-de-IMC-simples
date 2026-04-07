@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de IMC</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --border-color: #d1d5db;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 1.5rem;
+            font-size: 1.875rem;
+            color: var(--primary-color);
+        }
+
+        .input-group {
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        #result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            display: none;
+        }
+
+        .result-value {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .result-status {
+            font-size: 1.125rem;
+            font-weight: 500;
+        }
+
+        /* Cores para os resultados */
+        .status-normal { color: #059669; background-color: #ecfdf5; }
+        .status-warning { color: #d97706; background-color: #fffbeb; }
+        .status-danger { color: #dc2626; background-color: #fef2f2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de IMC</h1>
+        
+        <div class="input-group">
+            <label for="weight">Peso (kg)</label>
+            <input type="number" id="weight" placeholder="Ex: 75.5" step="0.1">
+        </div>
+
+        <div class="input-group">
+            <label for="height">Altura (m)</label>
+            <input type="number" id="height" placeholder="Ex: 1.75" step="0.01">
+        </div>
+
+        <button id="calculate-btn">Calcular IMC</button>
+
+        <div id="result">
+            <span class="result-value" id="bmi-value"></span>
+            <span class="result-status" id="bmi-status"></span>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('calculate-btn').addEventListener('click', function() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const resultDiv = document.getElementById('result');
+            const bmiValueSpan = document.getElementById('bmi-value');
+            const bmiStatusSpan = document.getElementById('bmi-status');
+
+            if (isNaN(weight) || isNaN(height) || height <= 0 || weight <= 0) {
+                alert('Por favor, insira valores válidos para peso e altura.');
+                return;
+            }
+
+            const bmi = (weight / (height * height)).toFixed(1);
+            bmiValueSpan.textContent = bmi;
+
+            let status = '';
+            let statusClass = '';
+
+            if (bmi < 18.5) {
+                status = 'Abaixo do peso';
+                statusClass = 'status-warning';
+            } else if (bmi >= 18.5 && bmi <= 24.9) {
+                status = 'Peso normal';
+                statusClass = 'status-normal';
+            } else if (bmi >= 25 && bmi <= 29.9) {
+                status = 'Sobrepeso';
+                statusClass = 'status-warning';
+            } else if (bmi >= 30 && bmi <= 34.9) {
+                status = 'Obesidade Grau I';
+                statusClass = 'status-danger';
+            } else if (bmi >= 35 && bmi <= 39.9) {
+                status = 'Obesidade Grau II';
+                statusClass = 'status-danger';
+            } else {
+                status = 'Obesidade Grau III';
+                statusClass = 'status-danger';
+            }
+
+            bmiStatusSpan.textContent = status;
+            resultDiv.className = ''; // Limpa classes anteriores
+            resultDiv.classList.add(statusClass);
+            resultDiv.style.display = 'block';
+        });
+
+        // Permitir calcular ao pressionar Enter
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('calculate-btn').click();
+            }
+        });
+    </script>
+</body>
+</html>
